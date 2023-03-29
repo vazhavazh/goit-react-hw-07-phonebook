@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/contactSlice';
+import { addContact } from 'redux/contact/contactOperations';
+import {selectContactsItems} from 'redux/contact/contactsSelectors'
 import {
   Form,
   InputContainers,
@@ -10,13 +11,14 @@ import {
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contacts.contacts);
+  const contacts = useSelector(selectContactsItems);
 
   const handleSubmit = e => {
     e.preventDefault();
     const form = e.target;
     const nameValue = e.target.elements.name.value;
     const numberValue = e.target.elements.number.value;
+    
     const existingContact = contacts.find(
       contact => contact.name === nameValue
     );
@@ -24,7 +26,7 @@ export const ContactForm = () => {
     if (existingContact) {
       alert('Contact with this name already exists');
     } else {
-      dispatch(addContact(nameValue, numberValue));
+      dispatch(addContact({ name: nameValue, number: numberValue }));
       form.reset();
     }
   };
